@@ -214,3 +214,31 @@ Ao executar esse comando o nodo irá automaticamente entrar na cluster, e você 
 Pode demorar alguns minutos até o novo nodo ficar utilizável, pois ao entrar no cluster ele irá começar a instalar uma série de dependências no nodo, o progresso da instalação é visível no Dashboard.
 ![](https://github.com/RSD-II/lucasalf/blob/main/Kubernetes/Dashboard.jpg)
 
+# Acessando o Dashboard no LARCC
+Para acessar o dashboard hospedado na VM dentro do LARCC, é necessário utizar um serviço de relay.
+1. Instalar a versão "insegura" do dashboard, que permite acesso exteno ao localhost.
+```
+curl https://vividcode.io/content/insecure-kubernetes-dashboard.yml --output dashboard.yaml
+kubectl apply -f dashboard.yaml
+```
+
+
+1. Criar uma conta em: https://webhookrelay.com/
+2. Instalar o webhook relay na máquina master:
+```
+curl https://my.webhookrelay.com/webhookrelay/downloads/install-cli.sh | bash
+```
+3. Criar um novo token em: https://my.webhookrelay.com/tokens
+4. Logar com token na maquina master:
+```
+relay login -k meutoken -s meusecret
+```
+5. Iniciar um proxy com o kubectl em um segundo terminal
+```
+kubectl proxy --address='0.0.0.0' --accept-hosts='^*$'
+```
+6. Criar uma conexão bidirencional com o relay
+```
+relay connect localhost:8001
+```
+7. Acessar o dashboard do Kubernates com a URL gerada.

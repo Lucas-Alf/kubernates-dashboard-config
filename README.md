@@ -200,7 +200,7 @@ Pode demorar alguns minutos até o novo nodo ficar utilizável, pois ao entrar n
 ![](https://github.com/RSD-II/lucasalf/blob/main/Kubernetes/Dashboard.jpg)
 
 # Acessando o Dashboard no LARCC
-Para acessar o dashboard hospedado na VM dentro do LARCC, é necessário utizar um serviço de relay.
+Para acessar o dashboard hospedado na VM dentro do LARCC, é necessário utilizar um serviço de relay.
 1. Criar uma conta em: https://webhookrelay.com/
 2. Instalar o webhook relay na máquina master:
 ```

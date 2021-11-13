@@ -18,10 +18,10 @@ Para a instalação do cluster Kubernetes foi utilizado os seguintes materiais c
 ## Hardware utilizado
 Para o desenvolvimento do cluster foram utilizadas máquinas virtuais disponibilizadas pelo [LARCC](https://larcc.setrem.com.br/).
 
-O cluster foi composto por 4 VMs com a mesma configuração, sendo 1 Master e 3 Nodos.
+O cluster foi composto por 4 VMs com a mesma configuração, sendo 1 Master e 2 Nodos.
 ### Master / Nodos
 * Processador: 2xCores
-* Memória: 4GB RAM
+* Memória: 2GB RAM
 * Armazenamento: 20GB
 * OS: Ubuntu Server 20.04
 

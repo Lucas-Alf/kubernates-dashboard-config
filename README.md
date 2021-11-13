@@ -113,6 +113,12 @@ nano /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
 ```
 ![](https://github.com/RSD-II/lucasalf/blob/main/Kubernetes/environment.png)
 
+## Reiniciar a máquina
+Para garantir que as configurações realizadas no namespace e variaveis de ambiente foram aplicadas, temos que reiniciar a máquina.
+```
+sudo reboot
+```
+
 ## Pronto!
 A configuração inicial do Kubernates foi realizada, as próximas etapas serão definir uma maquina como Master, no nosso caso o "knode", e adicionar os nodos ao cluster.
 

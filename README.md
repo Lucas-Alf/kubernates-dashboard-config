@@ -148,11 +148,10 @@ kubeadm join <ip-address-of-kmaster-vm>:port --token ...
 ```
 
 ## Copiar o arquivo .config do cluster
-Execute os comandos exibidos anteriormente como um usuário **NÃO ROOT**. 
-
-Pode ser criado um novo usuário somente para o Kubernetes neste caso.
+Deve ser criado um novo usuário somente para o Kubernetes neste caso.
 ```
 sudo adduser k8s
+usermod -aG sudo k8s
 ```
 
 Depois troque para o novo usuário, e execute os comandos.

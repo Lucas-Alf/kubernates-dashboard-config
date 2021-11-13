@@ -232,13 +232,12 @@ curl https://my.webhookrelay.com/webhookrelay/downloads/install-cli.sh | bash
 4. Logar com token na maquina master:
 ```
 relay login -k meutoken -s meusecret
+relay connect localhost:8001
 ```
 5. Iniciar um proxy com o kubectl em um segundo terminal
 ```
 kubectl proxy --address='0.0.0.0' --accept-hosts='^*$'
+kubectl port-forward -n kubernetes-dashboard service/kubernetes-dashboard 8001:80 --address 0.0.0.0
+kubectl create clusterrolebinding dashboard-admins -n default --clusterrole=cluster-admin --serviceaccount=kubernetes-dashboard:kubernetes-dashboard
 ```
-6. Criar uma conexão bidirencional com o relay
-```
-relay connect localhost:8001
-```
-7. Acessar o dashboard do Kubernates com a URL gerada.
+

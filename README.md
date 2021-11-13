@@ -164,7 +164,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 Para verificar se o cluster foi iniciado com sucesso, pode executar o seguinte comando e verificar se os pods estão sendo iniciados.
 ```
-kubectl get pods -o wide --all-namespace
+kubectl get pods -o wide -A
 ```
 
 ## Instalação da rede interna entre os Pods

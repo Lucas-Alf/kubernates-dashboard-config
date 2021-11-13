@@ -28,7 +28,7 @@ O cluster foi composto por 4 VMs com a mesma configuração, sendo 1 Master e 3 
 # Instalação do Kubernetes
 As seguintes etapas devem ser realizadas tanto na maquina Master quanto nos Nodos como usuário administrador.
 
-## Entrar como usuário "sudo" e atualizar o repositório de pacotes
+## Atualizar o repositório de pacotes
 ```
 $ sudo apt update
 ```

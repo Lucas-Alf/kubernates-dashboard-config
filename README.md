@@ -107,7 +107,7 @@ Na próxima etapa será definido o "cgroup-driver" como "cgroupfs" nas variaveis
 
 Adicione a seguinte linha:
 ```
-Environment=”cgroup-driver=systemd/cgroup-driver=cgroupfs”
+Environment="cgroup-driver=systemd/cgroup-driver=cgroupfs"
 ```
 no arquivo:
 ```

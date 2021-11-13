@@ -179,29 +179,14 @@ Após instalação, todos Pods devem ficar com o status "Running", incluindo os 
 ## Instalação do Kubernates Dashboard
 A instalação do [Dashboard](https://github.com/kubernetes/dashboard) deve ser realizada antes dos outros nodos se juntarem ao cluster, ao contrário pode ocorrer do Dashboard ser instalado em um nodo, e não no Master.
 ```
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.2.0/aio/deploy/recommended.yaml
+curl https://github.com/CC-SI-2021/kubernetes/blob/main/alternative.yaml --output alternative.yaml
+kubectl apply -f alternative.yaml
 ```
 
-Para ter acesso ao Dashboard, execute o seguinte comando:
+Para conseguir logar no Dashboard sem senha precisamos executar: 
 ```
-kubectl proxy
+kubectl create clusterrolebinding dashboard-admin -n default --clusterrole=cluster-admin --serviceaccount=kubernetes-dashboard:kubernetes-dashboard
 ```
-
-O Dashboard ficara disponível em:
-```
-http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
-```
-
-Para conseguir logar no Dashboard, vamos criar uma conta de serviço com direitos administrativos ao cluster. 
-```
-kubectl create serviceaccount dashboard -n default
-kubectl create clusterrolebinding dashboard-admin -n default --clusterrole=cluster-admin --serviceaccount=default:dashboard
-```
-Agora para conseguir o Token de acesso, execute o seguinte comando:
-```
-kubectl get secret $(kubectl get serviceaccount dashboard -o jsonpath="{.secrets[0].name}") -o jsonpath="{.data.token}" | base64 --decode
-```
-O Token pode ser utilizado para realizar o login no Dashboard.
 
 # Configuração dos nodos
 As seguintes etapas devem ser realizadas somente nas máquinas nodos do cluster.
@@ -216,13 +201,6 @@ Pode demorar alguns minutos até o novo nodo ficar utilizável, pois ao entrar n
 
 # Acessando o Dashboard no LARCC
 Para acessar o dashboard hospedado na VM dentro do LARCC, é necessário utizar um serviço de relay.
-1. Instalar a versão "insegura" do dashboard, que permite acesso exteno ao localhost.
-```
-curl https://vividcode.io/content/insecure-kubernetes-dashboard.yml --output dashboard.yaml
-kubectl apply -f dashboard.yaml
-```
-
-
 1. Criar uma conta em: https://webhookrelay.com/
 2. Instalar o webhook relay na máquina master:
 ```
@@ -232,12 +210,14 @@ curl https://my.webhookrelay.com/webhookrelay/downloads/install-cli.sh | bash
 4. Logar com token na maquina master:
 ```
 relay login -k meutoken -s meusecret
+```
+5. Inicializar o Relay:
+```
 relay connect localhost:8001
 ```
 5. Iniciar um proxy com o kubectl em um segundo terminal
 ```
-kubectl proxy --address='0.0.0.0' --accept-hosts='^*$'
 kubectl port-forward -n kubernetes-dashboard service/kubernetes-dashboard 8001:80 --address 0.0.0.0
-kubectl create clusterrolebinding dashboard-admins -n default --clusterrole=cluster-admin --serviceaccount=kubernetes-dashboard:kubernetes-dashboard
 ```
+6. Acessar a URL gerada pelo Relay.
 

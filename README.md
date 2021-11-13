@@ -30,8 +30,7 @@ As seguintes etapas devem ser realizadas tanto na maquina Master quanto nos Nodo
 
 ## Entrar como usuário "sudo" e atualizar o repositório de pacotes
 ```
-$ sudo su
-# apt-get update
+$ sudo apt update
 ```
 
 ## Desabilitar a utilização do espaço de Swap

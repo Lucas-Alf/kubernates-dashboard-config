@@ -59,6 +59,7 @@ Para construir um padrão de nomenclaturas, podemos chamar a máquina Master de 
 Para que as maquinas do cluster não percam o seu IP caso sejam desligadas ou reiniciadas, é necessário definir o IP como estático.
 
 Atualize o arquivo `/etc/network/interfaces` com uma configuração de IP estático, a formatação pode mudar dependendo da versão do Ubuntu.
+
 ![](https://github.com/RSD-II/lucasalf/blob/main/Kubernetes/static-ip.png)
 
 

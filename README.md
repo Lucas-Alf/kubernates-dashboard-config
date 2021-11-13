@@ -152,12 +152,12 @@ Execute os comandos exibidos anteriormente como um usuário **NÃO ROOT**.
 
 Pode ser criado um novo usuário somente para o Kubernetes neste caso.
 ```
-sudo adduser <user-name>
+sudo adduser k8s
 ```
 
 Depois troque para o novo usuário, e execute os comandos.
 ```
-su <user-name>
+su k8s
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config

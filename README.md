@@ -100,18 +100,21 @@ apt-get update
 apt-get install -y kubelet kubeadm kubectl
 ```
 
-## Configurar as variáveis de ambiente do Kubernetes
-Na próxima etapa será definido o "cgroup-driver" como "cgroupfs" nas variaveis de ambiente do Kubernetes.
+## Configurar o Docker para utilizar o systemd como padrão
+```
+sudo nano /etc/docker/daemon.json
+```
+Adicionar o seguinte conteudo:
+```
+{
+  "exec-opts": ["native.cgroupdriver=systemd"]
+}
+```
 
-Adicione a seguinte linha:
+Reiniciar o serviço do docker
 ```
-Environment="cgroup-driver=systemd/cgroup-driver=cgroupfs"
+sudo systemctl restart docker
 ```
-no arquivo:
-```
-nano /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
-```
-![](https://github.com/RSD-II/lucasalf/blob/main/Kubernetes/environment.png)
 
 ## Reiniciar a máquina
 Para garantir que as configurações realizadas no namespace e variaveis de ambiente foram aplicadas, temos que reiniciar a máquina.

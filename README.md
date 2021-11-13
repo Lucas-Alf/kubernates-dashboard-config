@@ -30,17 +30,17 @@ As seguintes etapas devem ser realizadas tanto na maquina Master quanto nos Nodo
 
 ## Atualizar o repositório de pacotes
 ```
-$ sudo apt update
+sudo apt update
 ```
 
 ## Desabilitar a utilização do espaço de Swap
 O espaço de Swap do sistema operacional deve ser desabilitado para a instalação do Kubernetes, ao contrário podem ocorrer erros durante a execução.
 ```
-# swapoff -a
+swapoff -a
 ```
 Verificar se existem partições de swap no fstab, caso existir devem ser removidas ou comentadas.
 ```
-# nano /etc/fstab
+nano /etc/fstab
 ```
 ![](https://github.com/RSD-II/lucasalf/blob/main/Kubernetes/fstab.png)
 
@@ -50,7 +50,7 @@ O Hostname da máquina será a forma como ela será identificada dentro do clust
 Para construir um padrão de nomenclaturas, podemos chamar a máquina Master de "kmaster" e os nodos de "knode0", "knode1", "knode2"...
 
 ```
-# nano /etc/hostname
+nano /etc/hostname
 ```
 ![](https://github.com/RSD-II/lucasalf/blob/main/Kubernetes/hostname.png)
 
@@ -68,19 +68,19 @@ Para que as maquinas possam se encontrar dentro do cluster, é necessário confi
 * No arquivo de hosts da maquina Master deve haver os IPs de todos os nodos.
 * Já nos nodos pode haver somente o IP da maquina master.
 ```
-# nano /etc/hosts
+nano /etc/hosts
 ```
 ![](https://github.com/RSD-II/lucasalf/blob/main/Kubernetes/hostfile.png)
 
 ## Instalar o pacote do OpenSSH-Server
 ```
-# sudo apt-get install openssh-server
+sudo apt-get install openssh-server
 ```
 
 ## Instalar os pacotes do Docker
 O seguinte comando irá instalar Docker e todas as suas dependencies, podendo demorar um pouco.
 ```
-# sudo apt-get install -y docker.io
+sudo apt-get install -y docker.io
 ```
 
 ## Instalar os pacotes do Curl
@@ -90,16 +90,14 @@ apt-get update && apt-get install -y apt-transport-https curl
 
 ## Adicionar o repositório do Kubernates ao sistema
 ```
-# curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
-# cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
-deb http://apt.kubernetes.io/ kubernetes-xenial main
-EOF
-# apt-get update
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+cat <<EOF >/etc/apt/sources.list.d/kubernetes.list deb http://apt.kubernetes.io/ kubernetes-xenial main EOF
+apt-get update
 ```
 
 ## Instalar os pacotes do kubeadm, Kubelet And Kubectl
 ```
-# apt-get install -y kubelet kubeadm kubectl
+apt-get install -y kubelet kubeadm kubectl
 ```
 
 ## Configurar as variáveis de ambiente do Kubernetes
@@ -111,7 +109,7 @@ Environment="cgroup-driver=systemd/cgroup-driver=cgroupfs"
 ```
 no arquivo:
 ```
-# nano /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+nano /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
 ```
 ![](https://github.com/RSD-II/lucasalf/blob/main/Kubernetes/environment.png)
 
@@ -124,20 +122,20 @@ As seguintes etapas devem ser realizadas somente na maquina Master.
 ## Iniciar o cluster da maquina Master
 O seguinte comando irá iniciar o cluster, altere o `<ip-address-of-kmaster-vm>` pelo IP da maquina master.
 ```
-# kubeadm init --apiserver-advertise-address=<ip-address-of-kmaster-vm> --pod-network-cidr=192.168.0.0/16
+kubeadm init --apiserver-advertise-address=<ip-address-of-kmaster-vm> --pod-network-cidr=192.168.0.0/16
 ```
 
 Dois resultados deste comando devem ser anotados.
 1. Os comandos para copiar o arquivo .config do cluster serão exibidos como:
 ```
- mkdir -p $HOME/.kube
- sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
- sudo chown $(id -u):$(id -g) $HOME/.kube/config
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 
 2. O comando utilizado para fazer os nodos se juntarem ao cluster será algo como:
 ```
- kubeadm join <ip-address-of-kmaster-vm>:port --token ...
+kubeadm join <ip-address-of-kmaster-vm>:port --token ...
 ```
 
 ## Copiar o arquivo .config do cluster
@@ -145,27 +143,27 @@ Execute os comandos exibidos anteriormente como um usuário **NÃO ROOT**.
 
 Pode ser criado um novo usuário somente para o Kubernetes neste caso.
 ```
-# sudo adduser <user-name>
+sudo adduser <user-name>
 ```
 
 Depois troque para o novo usuário, e execute os comandos.
 ```
-# su <user-name>
-$ mkdir -p $HOME/.kube
-$ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-$ sudo chown $(id -u):$(id -g) $HOME/.kube/config
+su <user-name>
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 
 Para verificar se o cluster foi iniciado com sucesso, pode executar o seguinte comando e verificar se os pods estão sendo iniciados.
 ```
-$ kubectl get pods -o wide --all-namespace
+kubectl get pods -o wide --all-namespace
 ```
 
 ## Instalação da rede interna entre os Pods
 No comando anterior deve ser notado que todos os Pods ficaram com o status "Running" menos o "kube-dns", para resolve isso, será instalado a rede intra-pod chamada de [CALICO](https://docs.projectcalico.org).
 ```
-$ kubectl create -f https://docs.projectcalico.org/manifests/tigera-operator.yaml
-$ kubectl create -f https://docs.projectcalico.org/manifests/custom-resources.yaml
+kubectl create -f https://docs.projectcalico.org/manifests/tigera-operator.yaml
+kubectl create -f https://docs.projectcalico.org/manifests/custom-resources.yaml
 ```
 
 Após instalação, todos Pods devem ficar com o status "Running", incluindo os novos pods do CALICO.
@@ -188,14 +186,12 @@ http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kube
 
 Para conseguir logar no Dashboard, vamos criar uma conta de serviço com direitos administrativos ao cluster. 
 ```
-$ kubectl create serviceaccount dashboard -n default
-$ kubectl create clusterrolebinding dashboard-admin -n default 
-  --clusterrole=cluster-admin 
-  --serviceaccount=default:dashboard
+kubectl create serviceaccount dashboard -n default
+kubectl create clusterrolebinding dashboard-admin -n default --clusterrole=cluster-admin --serviceaccount=default:dashboard
 ```
 Agora para conseguir o Token de acesso, execute o seguinte comando:
 ```
-$ kubectl get secret $(kubectl get serviceaccount dashboard -o jsonpath="{.secrets[0].name}") -o jsonpath="{.data.token}" | base64 --decode
+kubectl get secret $(kubectl get serviceaccount dashboard -o jsonpath="{.secrets[0].name}") -o jsonpath="{.data.token}" | base64 --decode
 ```
 O Token pode ser utilizado para realizar o login no Dashboard.
 

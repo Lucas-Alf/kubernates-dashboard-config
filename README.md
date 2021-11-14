@@ -220,13 +220,13 @@ curl https://my.webhookrelay.com/webhookrelay/downloads/install-cli.sh | bash
 ```
 relay login -k meutoken -s meusecret
 ```
-5. Inicializar o Relay:
-```
-relay connect localhost:8001
-```
 5. Iniciar um proxy com o kubectl em um segundo terminal
 ```
 kubectl port-forward -n kubernetes-dashboard service/kubernetes-dashboard 8001:80 --address 0.0.0.0
 ```
-6. Acessar a URL gerada pelo Relay.
+6. Inicializar o Relay:
+```
+relay connect localhost:8001
+```
+7. Acessar a URL gerada pelo Relay.
 

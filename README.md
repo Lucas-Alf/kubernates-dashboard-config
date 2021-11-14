@@ -185,9 +185,10 @@ Após instalação, todos Pods devem ficar com o status "Running", incluindo os 
 ## Instalação do Kubernates Dashboard
 A instalação do [Dashboard](https://github.com/kubernetes/dashboard) deve ser realizada antes dos outros nodos se juntarem ao cluster, ao contrário pode ocorrer do Dashboard ser instalado em um nodo, e não no Master.
 ```
-curl https://github.com/Lucas-Alf/kubernates-dashboard-config/blob/main/alternative.yaml --output alternative.yaml
+git clone https://github.com/Lucas-Alf/kubernates-dashboard-config.git
 ```
 ```
+cd kubernates-dashboard-config
 kubectl apply -f alternative.yaml
 ```
 

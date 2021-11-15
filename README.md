@@ -220,7 +220,7 @@ curl https://my.webhookrelay.com/webhookrelay/downloads/install-cli.sh | bash
 ```
 relay login -k meutoken -s meusecret
 ```
-5. Iniciar um proxy com o kubectl em um segundo terminal
+5. Iniciar um PortForward em um segundo terminal
 ```
 kubectl port-forward -n kubernetes-dashboard service/kubernetes-dashboard 8001:80 --address 0.0.0.0
 ```
@@ -230,3 +230,69 @@ relay connect localhost:8001
 ```
 7. Acessar a URL gerada pelo Relay.
 
+# Instalando o LoadBalancer MetalLB
+Habilitar o modo strict ARP.
+```
+kubectl get configmap kube-proxy -n kube-system -o yaml | \
+sed -e "s/strictARP: false/strictARP: true/" | \
+kubectl apply -f - -n kube-system
+```
+
+Instalar o MetalLB
+```
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.11.0/manifests/namespace.yaml
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.11.0/manifests/metallb.yaml
+```
+
+Criar o arquivo de configuração do MetalLB
+```
+metallb-config.yaml
+```
+Alterar o range de IPs da configuração conforme o disponibilizado em aula.
+```
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: metallb-system
+  name: config
+data:
+  config: |
+    address-pools:
+    - name: default
+      protocol: layer2
+      addresses:
+      - 192.168.20.202-192.168.20.204
+
+```
+
+Aplicar a configuração no cluster
+```
+kubectl apply -f metallb-config.yaml
+```
+
+# Rodando uma aplicação de demonstração no cluster
+Realizar o download da imagem de demonstração
+```
+git clone https://github.com/dockersamples/example-voting-app.git
+cd example-voting-app
+```
+
+Aplicar a imagem no cluster
+```
+kubectl create namespace vote
+kubectl create -f k8s-specifications/
+```
+
+Expor os novos serviços no load balancer
+```
+kubectl expose deployment vote -n vote --port=5000 --target-port=80 --name=vote-loadbalancer --type=LoadBalancer
+kubectl expose deployment result -n vote --port=5001 --target-port=80 --name=result-loadbalancer --type=LoadBalancer
+```
+
+Fazer o PortForward do serviço que deseja visualizar.
+
+Deve-se primeiro parar o PortForward do dashboard, somente um pode estar sendo executado por vez.
+```
+kubectl port-forward -n vote service/vote-loadbalancer 8001:5000 --address 0.0.0.0
+kubectl port-forward -n vote service/result-loadbalancer 8001:5001 --address 0.0.0.0
+```

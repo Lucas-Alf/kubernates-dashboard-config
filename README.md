@@ -42,7 +42,7 @@ Verificar se existem partições de swap no fstab, caso existir devem ser removi
 ```
 nano /etc/fstab
 ```
-![](https://github.com/RSD-II/lucasalf/blob/main/Kubernetes/fstab.png)
+![](https://github.com/Lucas-Alf/kubernates-wiki/blob/main/Kubernetes/fstab.png)
 
 ## Alterar o Hostname da máquina
 O Hostname da máquina será a forma como ela será identificada dentro do cluster, este nome irá aparecer no dashboard e nas consultas por nodos.
@@ -52,14 +52,14 @@ Para construir um padrão de nomenclaturas, podemos chamar a máquina Master de 
 ```
 nano /etc/hostname
 ```
-![](https://github.com/RSD-II/lucasalf/blob/main/Kubernetes/hostname.png)
+![](https://github.com/Lucas-Alf/kubernates-wiki/blob/main/Kubernetes/hostname.png)
 
 ## Definir o IP como estático
 Para que as maquinas do cluster não percam o seu IP caso sejam desligadas ou reiniciadas, é necessário definir o IP como estático.
 
 Atualize o arquivo `/etc/network/interfaces` com uma configuração de IP estático, a formatação pode mudar dependendo da versão do Ubuntu.
 
-![](https://github.com/RSD-II/lucasalf/blob/main/Kubernetes/static-ip.png)
+![](https://github.com/Lucas-Alf/kubernates-wiki/blob/main/Kubernetes/static-ip.png)
 
 
 ## Configurar o arquivo de hosts
@@ -70,7 +70,7 @@ Para que as maquinas possam se encontrar dentro do cluster, é necessário confi
 ```
 nano /etc/hosts
 ```
-![](https://github.com/RSD-II/lucasalf/blob/main/Kubernetes/hostfile.png)
+![](https://github.com/Lucas-Alf/kubernates-wiki/blob/main/Kubernetes/hostfile.png)
 
 ## Instalar o pacote do OpenSSH-Server
 ```
@@ -206,7 +206,7 @@ Para adicionar um novo nodo ao cluster somente é necessário executar o comando
 Ao executar esse comando o nodo irá automaticamente entrar na cluster, e você poderá visualiza-lo no Dashboard.
 
 Pode demorar alguns minutos até o novo nodo ficar utilizável, pois ao entrar no cluster ele irá começar a instalar uma série de dependências no nodo, o progresso da instalação é visível no Dashboard.
-![](https://github.com/RSD-II/lucasalf/blob/main/Kubernetes/Dashboard.jpg)
+![](https://github.com/Lucas-Alf/kubernates-wiki/blob/main/Kubernetes/Dashboard.jpg)
 
 # Acessando o Dashboard no LARCC
 Para acessar o dashboard hospedado na VM dentro do LARCC, é necessário utilizar um serviço de relay.
